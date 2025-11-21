@@ -7,6 +7,8 @@ import { VisualContext } from '../features/attachments/VisualContext';
 import { ArrowLeft, Wand2, CheckCircle2, Tag as TagIcon, Plus, X, Edit3, Eye } from 'lucide-react';
 import ReactMarkdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import SimpleMDE from "react-simplemde-editor";
+import "easymde/dist/easymde.min.css";
 
 export function MeetingView({ isNew }: { isNew?: boolean }) {
     const { id } = useParams();
@@ -283,12 +285,19 @@ export function MeetingView({ isNew }: { isNew?: boolean }) {
                             {/* Content */}
                             <div className="flex-1 overflow-auto">
                                 {isEditingMinutes ? (
-                                    <textarea
-                                        className="w-full h-full p-12 resize-none focus:outline-none text-lg leading-relaxed text-slate-800 placeholder-slate-300 font-serif"
-                                        placeholder="Minutes will appear here after generation..."
-                                        value={minutes}
-                                        onChange={(e) => handleMinutesChange(e.target.value)}
-                                    />
+                                    <div className="h-full overflow-hidden">
+                                        <SimpleMDE
+                                            value={minutes}
+                                            onChange={handleMinutesChange}
+                                            options={{
+                                                spellChecker: false,
+                                                status: false,
+                                                placeholder: "Minutes will appear here...",
+                                                toolbar: ["bold", "italic", "heading", "|", "quote", "unordered-list", "ordered-list", "|", "link", "image", "|", "preview", "side-by-side", "fullscreen"],
+                                            }}
+                                            className="h-full [&_.EasyMDEContainer]:h-full [&_.CodeMirror]:h-full [&_.CodeMirror]:border-none [&_.editor-toolbar]:border-none [&_.editor-toolbar]:bg-slate-50 [&_.editor-toolbar]:opacity-80 hover:[&_.editor-toolbar]:opacity-100 transition-opacity"
+                                        />
+                                    </div>
                                 ) : (
                                     <div className="prose prose-slate max-w-none p-12">
                                         {minutes ? (
